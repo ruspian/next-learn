@@ -1,4 +1,3 @@
-import React from "react";
 import { IoLogoGoogle } from "react-icons/io5";
 import { signIn } from "@/auth";
 
