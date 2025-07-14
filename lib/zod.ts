@@ -1,0 +1,13 @@
+import { object, string } from "zod";
+
+// buat falidasi untuk contact form
+export const contactSchema = object({
+  name: string().min(6, "Name must be at least 6 characters long"),
+  email: string()
+    .min(6, "Email must be at least 6 characters long")
+    .email("Invalid email"),
+  subject: string().min(6, "Subject must be at least 6 characters long"),
+  message: string()
+    .min(50, "Message must be at least 50 characters long")
+    .max(300, "Message must be at most 300 characters long"),
+});
