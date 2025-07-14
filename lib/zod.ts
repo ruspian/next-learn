@@ -1,4 +1,4 @@
-import { object, string } from "zod";
+import { object, string, coerce, array } from "zod";
 
 // buat falidasi untuk contact form
 export const contactSchema = object({
@@ -10,4 +10,13 @@ export const contactSchema = object({
   message: string()
     .min(50, "Message must be at least 50 characters long")
     .max(300, "Message must be at most 300 characters long"),
+});
+
+// buat validasi untuk room form
+export const RoomSchema = object({
+  name: string().min(1),
+  description: string().min(50),
+  capacity: coerce.number().gt(0),
+  price: coerce.number().gt(0),
+  amenities: array(string()).nonempty(),
 });

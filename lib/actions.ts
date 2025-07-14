@@ -1,9 +1,10 @@
 "use server";
 
-import { contactSchema } from "@/lib/zod";
+import { contactSchema, RoomSchema } from "@/lib/zod";
 import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
 
-// buat action untuk mengirim pesan
+// buat action untuk mengirim pesan di form contact
 export const ContactMessage = async (
   prevState: unknown,
   formData: FormData
@@ -36,4 +37,58 @@ export const ContactMessage = async (
   } catch (error) {
     console.log(error);
   }
+};
+
+// action untuk buat room
+export const SaveRoom = async (
+  image: string,
+  prevState: unknown,
+  formData: FormData
+) => {
+  // pastikan gambar di unggah
+  if (!image) return { message: "Image is required!" };
+
+  // dikarnakan fasilitas menggunakan array string
+  // maka harus di destructure satu persatu
+  const rawData = {
+    name: formData.get("name"),
+    description: formData.get("description"),
+    capacity: formData.get("capacity"),
+    price: formData.get("price"),
+    amenities: formData.getAll("amenities"),
+  };
+
+  // validasi data
+  const validatedFields = RoomSchema.safeParse(rawData);
+
+  // cek apakah data valid
+  if (!validatedFields.success) {
+    return { error: validatedFields.error.flatten().fieldErrors };
+  }
+
+  // jika berhasil ambil data
+  const { name, description, capacity, price, amenities } =
+    validatedFields.data;
+
+  // simpan data ke database
+  try {
+    await prisma.room.create({
+      data: {
+        name,
+        description,
+        capacity,
+        price,
+        image,
+        RoomAmenities: {
+          createMany: {
+            data: amenities.map((item) => ({ amenitiesId: item })),
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  redirect("/admin/room");
 };
