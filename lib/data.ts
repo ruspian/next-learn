@@ -21,3 +21,20 @@ export const getAmenities = async () => {
     console.log(error);
   }
 };
+
+// controller untuk ambil data room
+export const getRooms = async () => {
+  try {
+    // ambil semua data fasilitas
+    const result = await prisma.room.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    // kembalikan hasil
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
