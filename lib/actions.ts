@@ -3,6 +3,8 @@
 import { contactSchema, RoomSchema } from "@/lib/zod";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { del } from "@vercel/blob";
+import { revalidatePath } from "next/cache";
 
 // buat action untuk mengirim pesan di form contact
 export const ContactMessage = async (
@@ -91,4 +93,24 @@ export const SaveRoom = async (
   }
 
   redirect("/admin/room");
+};
+
+// action delete room
+export const DeleteRoom = async (id: string, image: string) => {
+  try {
+    // hapus gambar dari vercel blob dengan menggunakan del dari @vercel/blob
+    await del(image);
+
+    // hapus data room berdasarkan id
+    await prisma.room.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  // hapus chache, ambil data terbaru dan refresh halaman
+  revalidatePath("/admin/room");
 };

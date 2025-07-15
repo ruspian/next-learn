@@ -1,13 +1,14 @@
 import { getRooms } from "@/lib/data";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Image from "next/image";
+import { ButtonDeleteRoomComponent } from "@/components/admin/room/buttonDeleteRoomComponent";
 
 const RoomTableAdminComponent = async () => {
   const rooms = await getRooms();
-  if (!rooms) return <p>Empty Data!</p>;
+  if (!rooms) return <p className="text-center">Empty Data!</p>;
 
   return (
-    <div className="bg-white p-4 mt-5 shadow-sm">
+    <div className="bg-white p-4 mt-5 shadow-sm overflow-x-scroll md:overflow-hidden">
       <table className="w-full divide-y divide-gray-200">
         <thead>
           <tr>
@@ -48,7 +49,9 @@ const RoomTableAdminComponent = async () => {
                 <td className="px-6 py-4">
                   {formatDate(room.createdAt.toString())}
                 </td>
-                <td className="px-6 py-4 text-right"></td>
+                <td className="px-6 py-4 text-right">
+                  <ButtonDeleteRoomComponent id={room.id} image={room.image} />
+                </td>
               </tr>
             ))}
         </tbody>
