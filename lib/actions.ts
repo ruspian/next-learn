@@ -114,3 +114,65 @@ export const DeleteRoom = async (id: string, image: string) => {
   // hapus chache, ambil data terbaru dan refresh halaman
   revalidatePath("/admin/room");
 };
+
+//action update Room
+export const UpdateRoom = async (
+  image: string,
+  roomId: string,
+  prevState: unknown,
+  formData: FormData
+) => {
+  // pastikan gambar di unggah
+  if (!image) return { message: "Image is required!" };
+
+  // dikarnakan fasilitas menggunakan array string
+  // maka harus di destructure satu persatu
+  const rawData = {
+    name: formData.get("name"),
+    description: formData.get("description"),
+    capacity: formData.get("capacity"),
+    price: formData.get("price"),
+    amenities: formData.getAll("amenities"),
+  };
+
+  // validasi data
+  const validatedFields = RoomSchema.safeParse(rawData);
+
+  // cek apakah data valid
+  if (!validatedFields.success) {
+    return { error: validatedFields.error.flatten().fieldErrors };
+  }
+
+  // jika berhasil ambil data
+  const { name, description, capacity, price, amenities } =
+    validatedFields.data;
+
+  // simpan data ke database
+  try {
+    await prisma.$transaction([
+      prisma.room.update({
+        where: {
+          id: roomId,
+        },
+        data: {
+          name,
+          description,
+          capacity,
+          price,
+          image,
+          RoomAmenities: {
+            deleteMany: {}, // hapus semua fasilitas terlebih dahulu
+          },
+        },
+      }),
+      prisma.roomAmenities.createMany({
+        data: amenities.map((item) => ({ amenitiesId: item, roomId: roomId })), // tambahkan fasilitas baru
+      }),
+    ]);
+  } catch (error) {
+    console.log(error);
+  }
+
+  revalidatePath("/admin/room");
+  redirect("/admin/room");
+};

@@ -1,7 +1,10 @@
 import { getRooms } from "@/lib/data";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Image from "next/image";
-import { ButtonDeleteRoomComponent } from "@/components/admin/room/buttonDeleteRoomComponent";
+import {
+  ButtonDeleteRoomComponent,
+  ButtonEditRoomComponent,
+} from "@/components/admin/room/buttonRoomComponent";
 
 const RoomTableAdminComponent = async () => {
   const rooms = await getRooms();
@@ -50,7 +53,13 @@ const RoomTableAdminComponent = async () => {
                   {formatDate(room.createdAt.toString())}
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <ButtonDeleteRoomComponent id={room.id} image={room.image} />
+                  <div className="flex items-center justify-center gap-2">
+                    <ButtonEditRoomComponent id={room.id} />
+                    <ButtonDeleteRoomComponent
+                      id={room.id}
+                      image={room.image}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}
