@@ -15,3 +15,11 @@ export type RoomDetailProps = Prisma.RoomGetPayload<{
     };
   };
 }>;
+
+// type untuk disable date room
+export type DisableDateProps = Prisma.ReservationGetPayload<{
+  select: {
+    startDate: true;
+    endDate: true;
+  };
+}>;

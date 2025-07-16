@@ -3,6 +3,7 @@ import { getReservationById } from "@/lib/data";
 import { notFound } from "next/navigation";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { differenceInCalendarDays } from "date-fns";
+import PaymentButtonComponent from "@/components/paymentButtonComponent";
 
 const CheckoutDetailComponent = async ({
   reservationId,
@@ -47,6 +48,7 @@ const CheckoutDetailComponent = async ({
         </div>
 
         {/* button payment */}
+        <PaymentButtonComponent reservation={reservationData} />
       </div>
       <div className="border border-gray-200 px-3 py-5 bg-white rounded-sm">
         <table className="w-full">
