@@ -1,9 +1,26 @@
-import React from "react";
+import CheckoutDetailComponent from "@/components/checkoutDetailComponent";
+import React, { Suspense } from "react";
+import { Metadata } from "next";
 
-const CheckoutPage = () => {
+export const metadata: Metadata = {
+  title: "Reservation Summary",
+  description: "Reservation Summary",
+};
+
+const CheckoutPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const reservationId = (await params).id;
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-20 mt-12">
-      <h1>Checkout</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-4">
+        Reservation Summary
+      </h1>
+      <Suspense fallback={<p>Loading...</p>}>
+        <CheckoutDetailComponent reservationId={reservationId} />
+      </Suspense>
     </div>
   );
 };
