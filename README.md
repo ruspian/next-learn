@@ -1,6 +1,6 @@
-# Next Learn ✨
+# Hotel Booking Web App with Next.js ✨
 
-![Screenshot](./Screenshot.png)
+![Screenshot](./public/Screenshot.png)
 
 > A simple learning project built with **Next.js**, designed to explore and understand core features of the framework, including routing, API routes, and static generation.
 
@@ -33,7 +33,12 @@ next-learn/
 
 - [Next.js](https://nextjs.org/)
 - [React](https://reactjs.org/)
-- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Prisma](https://www.prisma.io/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Vercel](https://vercel.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Node.js](https://nodejs.org/en/)
 
 ## 📦 Installation
 
