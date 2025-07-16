@@ -6,6 +6,11 @@ const RoomSkeletonComponent = () => {
     <div className="max-w-screen-xl mx-auto py-6 px-4 pb-20">
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
         <CardSkeletonComponent />
+        <CardSkeletonComponent />
+        <CardSkeletonComponent />
+        <CardSkeletonComponent />
+        <CardSkeletonComponent />
+        <CardSkeletonComponent />
       </div>
     </div>
   );
