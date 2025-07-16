@@ -170,3 +170,81 @@ export const getReservationByUserId = async () => {
     console.log(error);
   }
 };
+
+// controller get revenue and reservation
+export const getTotalRevenueAndReservation = async () => {
+  try {
+    const result = await prisma.reservation.aggregate({
+      _count: true,
+      _sum: { price: true },
+      where: {
+        Payment: { status: { not: "failed" } },
+      },
+    });
+
+    return {
+      revenue: result._sum.price || 0,
+      reservation: result._count || 0,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// controller get user
+export const getTotalCustemer = async () => {
+  try {
+    const result = await prisma.reservation.findMany({
+      distinct: ["userId"],
+      where: {
+        Payment: { status: { not: "failed" } },
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// controller get reservation by user id
+export const getReservations = async () => {
+  const session = await auth();
+
+  // cek apakah user sudah login
+  if (!session || !session?.user || session?.user?.role !== "admin") {
+    throw new Error("You must be logged in to get reservations");
+  }
+
+  try {
+    const result = await prisma.reservation.findMany({
+      include: {
+        Room: {
+          select: {
+            name: true,
+            image: true,
+            price: true,
+          },
+        },
+        User: {
+          select: {
+            name: true,
+            email: true,
+            phone: true,
+          },
+        },
+        Payment: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
